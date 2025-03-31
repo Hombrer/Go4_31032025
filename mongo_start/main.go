@@ -127,4 +127,21 @@ func main()  {
 	fmt.Println("Key: strEx", secondResult["strEx"])
 	fmt.Println("Key: intEx", secondResult["intEx"])
 	fmt.Println("Key: strSlice", secondResult["strSlice"])
+
+	// Get all documents
+	allExamples, err := exampleCollection.Find(ctx, bson.D{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	
+	var resExamples []bson.M
+	if err := allExamples.All(ctx, &resExamples); err != nil {
+		log.Fatal(err)
+	}
+	for _, e := range resExamples {
+		fmt.Printf("\nItem with ID: %v, containing the following:\n", e["_id"])
+		fmt.Println("Key: strEx", e["strEx"])
+		fmt.Println("Key: intEx", e["intEx"])
+		fmt.Println("Key: strSlice", e["strSlice"])
+	}
 }
