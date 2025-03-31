@@ -128,8 +128,13 @@ func main()  {
 	fmt.Println("Key: intEx", secondResult["intEx"])
 	fmt.Println("Key: strSlice", secondResult["strSlice"])
 
-	// Get all documents
-	allExamples, err := exampleCollection.Find(ctx, bson.M{})
+	// Get all documents / Get all documents with Limit
+	fmt.Println("\nFind all documents:")
+	limitOpts := options.Find()
+	limitOpts.SetSkip(3)
+	limitOpts.SetLimit(5)
+
+	allExamples, err := exampleCollection.Find(ctx, bson.M{}, limitOpts)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -138,12 +143,12 @@ func main()  {
 	if err := allExamples.All(ctx, &resExamples); err != nil {
 		log.Fatal(err)
 	}
-	// for _, e := range resExamples {
-	// 	fmt.Printf("\nItem with ID: %v, containing the following:\n", e["_id"])
-	// 	fmt.Println("Key: strEx", e["strEx"])
-	// 	fmt.Println("Key: intEx", e["intEx"])
-	// 	fmt.Println("Key: strSlice", e["strSlice"])
-	// }
+	for _, e := range resExamples {
+		fmt.Printf("\nItem with ID: %v, containing the following:\n", e["_id"])
+		fmt.Println("Key: strEx", e["strEx"])
+		fmt.Println("Key: intEx", e["intEx"])
+		fmt.Println("Key: strSlice", e["strSlice"])
+	}
 
 	// ==========
 	//   Update
