@@ -93,5 +93,38 @@ func main()  {
 	//    Read
 	// ==========
 
-	
+	// find document by ObjectID
+	sr := exampleCollection.FindOne(ctx, bson.M{"_id": r.InsertedID})
+
+	var exampleResult bson.M
+	err = sr.Decode(&exampleResult)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Print document
+	fmt.Printf("\nItem with ID: %v, containing the following:\n", exampleResult["_id"])
+	fmt.Println("Key: strEx", exampleResult["strEx"])
+	fmt.Println("Key: intEx", exampleResult["intEx"])
+	fmt.Println("Key: strSlice", exampleResult["strSlice"])
+
+	// find document by value of ObjectID
+	objectID, err := bson.ObjectIDFromHex("67ea875ce2fd0f65a7b82a66")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(objectID)
+
+	second_sr := exampleCollection.FindOne(ctx, bson.M{"_id": bson.M{"$eq": objectID}})
+
+	var secondResult bson.M
+	err = second_sr.Decode(&secondResult)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// Print document
+	fmt.Printf("\nItem with ID: %v, containing the following:\n", secondResult["_id"])
+	fmt.Println("Key: strEx", secondResult["strEx"])
+	fmt.Println("Key: intEx", secondResult["intEx"])
+	fmt.Println("Key: strSlice", secondResult["strSlice"])
 }
