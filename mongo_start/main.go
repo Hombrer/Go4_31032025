@@ -69,7 +69,7 @@ func main()  {
 	fmt.Println(r.InsertedID, r.Acknowledged)
 
 	// Insert many documents
-	newDocs := []interface{}{
+	newDocs := []any{
 		bson.D{
 			{Key: "strEx", Value: "Hello, Students!"},
 			{Key: "intEx", Value: 34},
@@ -93,4 +93,5 @@ func main()  {
 	//    Read
 	// ==========
 
+	
 }
