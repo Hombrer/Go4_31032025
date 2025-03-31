@@ -129,7 +129,7 @@ func main()  {
 	fmt.Println("Key: strSlice", secondResult["strSlice"])
 
 	// Get all documents
-	allExamples, err := exampleCollection.Find(ctx, bson.D{})
+	allExamples, err := exampleCollection.Find(ctx, bson.M{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -138,10 +138,55 @@ func main()  {
 	if err := allExamples.All(ctx, &resExamples); err != nil {
 		log.Fatal(err)
 	}
-	for _, e := range resExamples {
-		fmt.Printf("\nItem with ID: %v, containing the following:\n", e["_id"])
-		fmt.Println("Key: strEx", e["strEx"])
-		fmt.Println("Key: intEx", e["intEx"])
-		fmt.Println("Key: strSlice", e["strSlice"])
+	// for _, e := range resExamples {
+	// 	fmt.Printf("\nItem with ID: %v, containing the following:\n", e["_id"])
+	// 	fmt.Println("Key: strEx", e["strEx"])
+	// 	fmt.Println("Key: intEx", e["intEx"])
+	// 	fmt.Println("Key: strSlice", e["strSlice"])
+	// }
+
+	// ==========
+	//   Update
+	// ==========
+
+	// Update one document
+	rUpd, err := exampleCollection.UpdateOne(
+		ctx, 
+		bson.M{"_id": r.InsertedID}, 
+		bson.D{
+			{Key: "$set", Value: bson.M{"strEx": "Change string"}},
+		},
+	)
+	if err != nil {
+		log.Fatal(err)
 	}
+	fmt.Println(rUpd.ModifiedCount)
+
+	// Check new data
+	srUpd := exampleCollection.FindOne(ctx, bson.M{"_id": r.InsertedID})
+
+	var exampleUpd bson.M
+	err = srUpd.Decode(&exampleUpd)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("\nItem with ID: %v, containing the following changes:\n", exampleUpd["_id"])
+	fmt.Println("Key: strEx", exampleUpd["strEx"])
+
+	// Update many documents
+	manyUpd, err := exampleCollection.UpdateMany(ctx,
+		bson.D{
+			{Key: "intEx", Value: bson.D{{Key: "$gt", Value: 60}}},
+		},
+		bson.D{
+			{Key: "$set", Value: bson.M{"intEx": 60}},
+		},
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(manyUpd.ModifiedCount)
+
+	
 }
