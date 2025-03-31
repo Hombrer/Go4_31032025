@@ -3,7 +3,7 @@ package main
 
 import (
 	"context"
-	// "go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/bson"
     "go.mongodb.org/mongo-driver/v2/mongo"
     "go.mongodb.org/mongo-driver/v2/mongo/options"
     "go.mongodb.org/mongo-driver/v2/mongo/readpref"
@@ -31,4 +31,24 @@ func main()  {
 		log.Fatal(err)
 	}
 
+	// Get all database names
+	dbNames, err := client.ListDatabaseNames(ctx, bson.M{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(dbNames)
+
+	// Create new database and new collection 
+	exampleDB := client.Database("exdb")
+
+	fmt.Printf("%T\n", exampleDB)
+
+	exampleCollection := exampleDB.Collection("example")
+
+	fmt.Printf("%T\n", exampleCollection)
+
+	// Delete full collection
+	// defer exampleCollection.Drop(ctx)
+
+	
 }
