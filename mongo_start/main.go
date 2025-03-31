@@ -188,5 +188,13 @@ func main()  {
 	}
 	fmt.Println(manyUpd.ModifiedCount)
 
-	
+	// ==========
+	//   Delete
+	// ==========
+
+	rDel, err := exampleCollection.DeleteOne(ctx, bson.M{"_id": r.InsertedID})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Count of deleted documents:", rDel.DeletedCount)
 }
