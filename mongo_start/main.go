@@ -50,5 +50,18 @@ func main()  {
 	// Delete full collection
 	// defer exampleCollection.Drop(ctx)
 
-	
+	newDoc := bson.D{
+		{Key: "strEx", Value: "Hello, Mongo!"},
+		{Key: "intEx", Value: 12},
+		{Key: "strSlice", Value: []string{"first", "second", "third"}},
+	}
+
+	// Insert new document
+	r, err := exampleCollection.InsertOne(ctx, newDoc)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Print new document "_id"
+	fmt.Println(r.InsertedID, r.Acknowledged)
 }
