@@ -50,6 +50,9 @@ func main()  {
 	// Delete full collection
 	// defer exampleCollection.Drop(ctx)
 
+	// ==========
+	//   Create
+	// ==========
 	newDoc := bson.D{
 		{Key: "strEx", Value: "Hello, Mongo!"},
 		{Key: "intEx", Value: 12},
@@ -64,4 +67,30 @@ func main()  {
 
 	// Print new document "_id"
 	fmt.Println(r.InsertedID, r.Acknowledged)
+
+	// Insert many documents
+	newDocs := []interface{}{
+		bson.D{
+			{Key: "strEx", Value: "Hello, Students!"},
+			{Key: "intEx", Value: 34},
+			{Key: "strSlice", Value: []string{"first2", "second2", "third2"}},
+		},
+		bson.D{
+			{Key: "strEx", Value: "Hello, Teacher!"},
+			{Key: "intEx", Value: 124},
+			{Key: "strSlice", Value: []string{"first3", "second3", "third3"}},
+		},
+	}
+
+	rs, err := exampleCollection.InsertMany(ctx, newDocs)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// Print new document "_id"s
+	fmt.Println(rs.InsertedIDs)
+
+	// ==========
+	//    Read
+	// ==========
+
 }
