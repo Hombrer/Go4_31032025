@@ -28,4 +28,12 @@ query GetOnePost {
     Updated_At
   }
 }
+
+query Types {
+  __type(name: "Post") {
+    fields {
+      name
+    }
+  }
+}
 ```
